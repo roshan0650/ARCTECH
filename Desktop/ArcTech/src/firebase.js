@@ -6,13 +6,13 @@ import { getFirestore } from "firebase/firestore";
 // TODO: Replace the following with your app's Firebase project configuration
 // See: https://firebase.google.com/docs/web/setup#config-object
 const firebaseConfig = {
-    apiKey: "AIzaSyCwuk1pYHnTjA656TRMFPDNpuHqKYEgqdc",
-    authDomain: "arc-tech-1c0c7.firebaseapp.com",
-    projectId: "arc-tech-1c0c7",
-    storageBucket: "arc-tech-1c0c7.firebasestorage.app",
-    messagingSenderId: "630860272842",
-    appId: "1:630860272842:web:3c428f101d615dfb829033",
-    measurementId: "G-SVXL4ZPTCK"
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_FIREBASE_APP_ID,
+    measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 // Initialize Firebase
