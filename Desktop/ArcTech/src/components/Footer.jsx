@@ -26,6 +26,7 @@ const Footer = () => {
                             <li><Link to="/services">App Development</Link></li>
                             <li><Link to="/services">UI/UX Design</Link></li>
                             <li><Link to="/services">Cloud Solutions</Link></li>
+                            <li><Link to="/admin">Admin Portal</Link></li>
                         </ul>
                     </div>
                     <div className="footer-col">

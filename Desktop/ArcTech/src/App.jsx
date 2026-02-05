@@ -12,6 +12,8 @@ import { AuthProvider } from './context/AuthContext';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import PrivateRoute from './components/PrivateRoute';
+import AdminLogin from './pages/AdminLogin';
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
   return (
@@ -31,6 +33,10 @@ function App() {
               <Dashboard />
             </PrivateRoute>
           } />
+
+          {/* Admin Routes */}
+          <Route path="/admin" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
         </Routes>
       </Layout>
     </AuthProvider>

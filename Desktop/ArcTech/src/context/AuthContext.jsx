@@ -3,7 +3,9 @@ import {
     GoogleAuthProvider,
     signInWithPopup,
     signOut,
-    onAuthStateChanged
+    onAuthStateChanged,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword
 } from 'firebase/auth';
 import { auth } from '../firebase';
 
@@ -23,6 +25,16 @@ export const AuthProvider = ({ children }) => {
         return signInWithPopup(auth, provider);
     };
 
+    // Sign in with Email
+    const loginWithEmail = (email, password) => {
+        return signInWithEmailAndPassword(auth, email, password);
+    };
+
+    // Register with Email
+    const registerWithEmail = (email, password) => {
+        return createUserWithEmailAndPassword(auth, email, password);
+    };
+
     // Sign in with Demo (Mock)
     const loginWithDemo = () => {
         const mockUser = {
@@ -33,6 +45,21 @@ export const AuthProvider = ({ children }) => {
         };
         localStorage.setItem('demoUser', JSON.stringify(mockUser));
         setCurrentUser(mockUser);
+
+        // Register Demo User to Admin DB if not there
+        const adminUsers = JSON.parse(localStorage.getItem('adminUsers') || '[]');
+        if (!adminUsers.find(u => u.id === mockUser.uid)) {
+            const newUserEntry = {
+                id: mockUser.uid,
+                name: mockUser.displayName,
+                email: mockUser.email,
+                role: 'Member',
+                status: 'Active',
+                joinedAt: new Date().toISOString()
+            };
+            localStorage.setItem('adminUsers', JSON.stringify([...adminUsers, newUserEntry]));
+        }
+
         return Promise.resolve(mockUser);
     };
 
@@ -60,6 +87,23 @@ export const AuthProvider = ({ children }) => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             setCurrentUser(user);
             setLoading(false);
+
+            // NOTE: Auto-register user to Admin Dashboard mock DB for demo purposes
+            if (user) {
+                const adminUsers = JSON.parse(localStorage.getItem('adminUsers') || '[]');
+                const exists = adminUsers.find(u => u.email === user.email);
+                if (!exists) {
+                    const newUserEntry = {
+                        id: user.uid,
+                        name: user.displayName || 'Google User',
+                        email: user.email,
+                        role: 'Member',
+                        status: 'Active',
+                        joinedAt: new Date().toISOString()
+                    };
+                    localStorage.setItem('adminUsers', JSON.stringify([...adminUsers, newUserEntry]));
+                }
+            }
         });
 
         return unsubscribe;
@@ -68,6 +112,8 @@ export const AuthProvider = ({ children }) => {
     const value = {
         currentUser,
         loginWithGoogle,
+        loginWithEmail,
+        registerWithEmail,
         loginWithDemo,
         logout
     };
